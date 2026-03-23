@@ -62,7 +62,7 @@ O projeto visual foi idealizado e construído por **Carolina ALves**.
 
 O projeto encontra-se **Finalizado** e hospedado através da plataforma Vercel.
 
-🔗 **[Acessar o site ao vivo](COLE_SEU_LINK_DA_VERCEL_AQUI)**
+🔗 **[Acessar o site ao vivo](https://davi-araujo-quadros.vercel.app/)**
 
 ---
 
