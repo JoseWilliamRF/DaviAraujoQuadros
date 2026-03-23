@@ -25,7 +25,29 @@ body {
   overflow-x: hidden;
 }
 
-/* CLASSE MÁGICA DE CENTRALIZAÇÃO */
+/* =========================================
+   BARRA DE PROGRESSO DE ROLAGEM
+   ========================================= */
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999; /* Fica acima de TUDO, até do header */
+  width: 100%;
+  height: 3px; /* Bem fininha e elegante */
+  background: transparent;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: var(
+    --bg-light
+  ); /* Linha branca. Se quiser verde, use var(--wa-green) */
+  width: 0%; /* Começa zerada */
+  transition: width 0.1s ease-out; /* Deixa o movimento fluido */
+}
+
+/* CLASSE DE CENTRALIZAÇÃO */
 .container {
   width: 100%;
   max-width: var(--container-width);

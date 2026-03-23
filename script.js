@@ -33,7 +33,7 @@ navLinks.forEach(link => {
 });
 
 // ==========================================
-// 2. EVENTO DE FUNDO/SOMBRA NA NAVBAR
+// 2. EVENTO DE FUNDO/SOMBRA NA NAVBAR E BARRA DE PROGRESSO
 // ==========================================
 window.addEventListener('scroll', () => {
   if (window.scrollY <= 50) {
@@ -44,6 +44,17 @@ window.addEventListener('scroll', () => {
     headerElement.style.backgroundColor = 'var(--bg-dark)';
     headerElement.style.boxShadow = '0px 3px 20px -5px rgba(0, 0, 0, 0.8)';
   }
+
+  // --- Lógica da Barra de Progresso ---
+  const winScroll =
+    document.body.scrollTop || document.documentElement.scrollTop;
+  const height =
+    document.documentElement.scrollHeight -
+    document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+
+  const myBar = document.getElementById('myBar');
+  if (myBar) myBar.style.width = scrolled + '%';
 });
 
 // ==========================================
