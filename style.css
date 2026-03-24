@@ -163,7 +163,7 @@ body {
   display: flex;
   align-items: center;
   /* Substitua a URL pela sua imagem da Justiça */
-  background-image: url('./images/background.png');
+  background-image: url('./images/background.webp');
   background-size: cover;
   background-position: center right;
   padding-top: 10rem !important; /* Evita que o texto encoste no header */
@@ -239,6 +239,8 @@ body {
 
 .card-icon img {
   height: 4rem;
+  width: auto;
+  aspect-ratio: 1 / 1;
   filter: invert(1); /* Deixa ícones pretos brancos, caso não sejam */
 }
 
