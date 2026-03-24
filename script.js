@@ -3,9 +3,9 @@ const mobileBtn = document.querySelector('.mobile-btn');
 const navList = document.querySelector('.nav-list');
 const icon = mobileBtn.querySelector('.fa-solid');
 const headerElement = document.querySelector('.header');
-const waFlutuante = document.querySelector('.wa-flutuante'); // Seleciona o botão flutuante
+const waFlutuante = document.querySelector('.wa-flutuante');
 
-// SELETORES PARA O FADE-IN (Usando os IDs das seções)
+// SELETORES PARA O FADE-IN
 const home = document.querySelector('#inicio');
 const atuacao = document.querySelector('#atuacao');
 const sobre = document.querySelector('#sobre');
@@ -14,15 +14,14 @@ const footer = document.querySelector('.footer');
 const sectionObserve = [home, atuacao, sobre, contato, footer];
 
 // ==========================================
-// 1. EVENTO DE CLIQUE ESCONDE/MOSTRA MENU
+// 1. EVENTOS DE MENU (MOBILE)
 // ==========================================
 mobileBtn.addEventListener('click', () => {
   navList.classList.toggle('active');
   icon.classList.toggle('fa-bars');
-  icon.classList.toggle('fa-xmark'); // Usamos fa-xmark (X) do FontAwesome
+  icon.classList.toggle('fa-xmark');
 });
 
-// FECHAR O MENU QUANDO CLICAR EM UM LINK (Regra de Ouro UX Mobile)
 const navLinks = document.querySelectorAll('.nav-list li a');
 navLinks.forEach(link => {
   link.addEventListener('click', () => {
@@ -33,16 +32,17 @@ navLinks.forEach(link => {
 });
 
 // ==========================================
-// 2. EVENTO DE FUNDO/SOMBRA NA NAVBAR E BARRA DE PROGRESSO
+// 2. SCROLL: HEADER, PROGRESS BAR E REDE DE SEGURANÇA
 // ==========================================
 window.addEventListener('scroll', () => {
+  // Header Glassmorphism
   if (window.scrollY <= 50) {
-    headerElement.classList.remove('scrolled'); // Remove o efeito de vidro no topo
+    headerElement.classList.remove('scrolled');
   } else {
-    headerElement.classList.add('scrolled'); // Aplica o efeito ao rolar
+    headerElement.classList.add('scrolled');
   }
 
-  // --- Mantém a lógica da Barra de Progresso que você já tem ---
+  // Barra de Progresso
   const winScroll =
     document.body.scrollTop || document.documentElement.scrollTop;
   const height =
@@ -51,84 +51,102 @@ window.addEventListener('scroll', () => {
   const scrolled = (winScroll / height) * 100;
   const myBar = document.getElementById('myBar');
   if (myBar) myBar.style.width = scrolled + '%';
+
+  // --- REDE DE SEGURANÇA PARA SEÇÃO PEQUENA (CONTATO) ---
+  // Se o usuário chegar no fim absoluto da página, forçamos o Contato ativo
+  const scrollTotal = document.documentElement.scrollHeight;
+  const scrollPos = window.innerHeight + window.scrollY;
+
+  if (scrollTotal - scrollPos <= 50) {
+    // Margem de 50px do fim da página
+    document
+      .querySelectorAll('.nav-list li a')
+      .forEach(l => l.classList.remove('active'));
+    const linkContato = document.querySelector(
+      '.nav-list li a[href="#contato"]',
+    );
+    if (linkContato) linkContato.classList.add('active');
+    if (waFlutuante) waFlutuante.classList.add('hide');
+  }
 });
 
 // ==========================================
-// 3. EVENTO DE FADE-IN NAS SECTIONS
-// ==========================================
-// ==========================================
-// 3. SENSORES (ANIMAÇÃO & MENU ATIVO)
+// 3. OBSERVERS (ANIMAÇÃO E MENU)
 // ==========================================
 
-// SENSOR 1: Para as animações (Fade-In)
-// Ele é sensível: assim que a seção aparece 15%, ela ganha opacidade
+// SENSOR 1: Fade-In e Controle do WhatsApp (Alta Sensibilidade)
 const revealObserver = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('fadeIn');
+
+        // Seção Contato detectada -> Esconde WhatsApp
+        if (entry.target.id === 'contato' && waFlutuante) {
+          waFlutuante.classList.add('hide');
+        }
+      } else {
+        // Saiu da seção Contato (subindo) -> Mostra WhatsApp
+        if (entry.target.id === 'contato' && waFlutuante) {
+          waFlutuante.classList.remove('hide');
+        }
       }
     });
   },
-  { threshold: 0.15 },
-);
+  { threshold: 0.1 },
+); // Dispara assim que 10% da seção aparece
 
-// SENSOR 2: Para o Menu Ativo e WhatsApp (Scroll Spy)
-// Ele é focado no topo: só muda o menu quando a seção chega lá em cima
+// SENSOR 2: Menu Ativo (Scroll Spy de Precisão)
 const spyObserver = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Lógica do Menu Dourado
+      // Só processa se não estivermos no fim da página (para não conflitar com a Rede de Segurança)
+      const isAtBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 60;
+
+      if (entry.isIntersecting && !isAtBottom) {
         const id = entry.target.getAttribute('id');
         const menuLink = document.querySelector(
           `.nav-list li a[href="#${id}"]`,
         );
+
         if (menuLink) {
           document
             .querySelectorAll('.nav-list li a')
             .forEach(l => l.classList.remove('active'));
           menuLink.classList.add('active');
         }
-
-        // Lógica do WhatsApp (Esconde no Contato)
-        if (entry.target.id === 'contato') {
-          if (waFlutuante) waFlutuante.classList.add('hide');
-        }
-      } else {
-        // Mostra o WhatsApp ao subir e sair do Contato
-        if (entry.target.id === 'contato') {
-          if (waFlutuante) waFlutuante.classList.remove('hide');
-        }
       }
     });
   },
   { rootMargin: '0px 0px -70% 0px' },
-); // Ajuste de precisão
+);
 
-// Ativando os dois sensores em todas as seções
+// Ativação
 sectionObserve.forEach(section => {
   if (section) {
-    section.classList.add('reveal'); // Garante que comece invisível
-    revealObserver.observe(section); // Cuida do Fade-In
-    spyObserver.observe(section); // Cuida do Dourado no Menu
+    section.classList.add('reveal');
+    revealObserver.observe(section);
+    spyObserver.observe(section);
   }
 });
+
 document.getElementById('ano-atual').textContent = new Date().getFullYear();
 
 // ==========================================
-// LGPD - BANNER DE COOKIES
+// 4. LGPD
 // ==========================================
 const cookieBanner = document.getElementById('cookie-banner');
 const btnAccept = document.getElementById('accept-cookies');
 
-// Verifica se o usuário já aceitou antes
 if (!localStorage.getItem('cookiesAceitos')) {
-  cookieBanner.style.display = 'block';
+  if (cookieBanner) cookieBanner.style.display = 'block';
 }
 
-// Ao clicar no botão, esconde o banner e salva a escolha
-btnAccept.addEventListener('click', () => {
-  localStorage.setItem('cookiesAceitos', 'true');
-  cookieBanner.style.display = 'none';
-});
+if (btnAccept) {
+  btnAccept.addEventListener('click', () => {
+    localStorage.setItem('cookiesAceitos', 'true');
+    cookieBanner.style.display = 'none';
+  });
+}
