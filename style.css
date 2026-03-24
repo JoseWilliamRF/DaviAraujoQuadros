@@ -79,11 +79,11 @@ body {
     5,
     5,
     5,
-    0.7
+    0.92
   ) !important; /* Preto com 70% de transparência */
-  backdrop-filter: blur(10px); /* O efeito de desfoque */
-  -webkit-backdrop-filter: blur(10px); /* Suporte para navegadores Apple */
-  padding: 1.25rem 0; /* diminui um pouco a altura do header ao rolar */
+  backdrop-filter: blur(15px); /* O efeito de desfoque */
+  -webkit-backdrop-filter: blur(15px); /* Suporte para navegadores Apple */
+  padding: 1rem 0; /* diminui um pouco a altura do header ao rolar */
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
 }
 
