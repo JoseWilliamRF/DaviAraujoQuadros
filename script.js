@@ -37,22 +37,18 @@ navLinks.forEach(link => {
 // ==========================================
 window.addEventListener('scroll', () => {
   if (window.scrollY <= 50) {
-    headerElement.style.backgroundColor = 'transparent';
-    headerElement.style.boxShadow = 'none';
+    headerElement.classList.remove('scrolled'); // Remove o efeito de vidro no topo
   } else {
-    // Quando rolar a tela, o menu ganha fundo escuro para leitura e uma sombra
-    headerElement.style.backgroundColor = 'var(--bg-dark)';
-    headerElement.style.boxShadow = '0px 3px 20px -5px rgba(0, 0, 0, 0.8)';
+    headerElement.classList.add('scrolled'); // Aplica o efeito ao rolar
   }
 
-  // --- Lógica da Barra de Progresso ---
+  // --- Mantém a lógica da Barra de Progresso que você já tem ---
   const winScroll =
     document.body.scrollTop || document.documentElement.scrollTop;
   const height =
     document.documentElement.scrollHeight -
     document.documentElement.clientHeight;
   const scrolled = (winScroll / height) * 100;
-
   const myBar = document.getElementById('myBar');
   if (myBar) myBar.style.width = scrolled + '%';
 });
