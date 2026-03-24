@@ -6,7 +6,7 @@
   --bg-light: #ffffff;
   --text-light: #ffffff;
   --text-dark: #000000;
-  --wa-green: #25d366;
+  --btn-accent: #c5a059;
   --container-width: 68.75rem;
 }
 
@@ -143,9 +143,9 @@ body {
   margin: 0 0.9375rem;
 }
 
-/* Ícone do WhatsApp no Header */
+/* Ícone do E-MAIL no Header */
 .nav-whatsapp {
-  background-color: var(--wa-green);
+  background-color: var(--btn-accent);
   color: white;
   width: 2.1875rem;
   height: 2.1875rem;
@@ -422,12 +422,12 @@ body {
   cursor: pointer;
 }
 
-/* --- WHATSAPP FLUTUANTE --- */
+/* --- E-MAIL FLUTUANTE --- */
 .wa-flutuante {
   position: fixed;
   bottom: 1.875rem;
   right: 1.875rem;
-  background-color: var(--wa-green);
+  background-color: var(--btn-accent);
   color: var(--text-light);
   width: 3.75rem;
   height: 3.75rem;
