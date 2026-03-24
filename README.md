@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#-o-projeto">O Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-funcionalidades">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-funcionalidades-e-performance">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#%EF%B8%8F-tecnologias-e-arquitetura">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-uiux--design">Design</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-status-e-deploy">Deploy</a>
@@ -30,30 +30,34 @@ Landing Page de alta conversão desenvolvida para o escritório **Davi Quadros A
 
 A arquitetura do site foi pensada para reduzir o atrito de comunicação, guiando o usuário de forma fluida até o contato direto via WhatsApp, através de gatilhos visuais e chamadas para ação (CTAs) estratégicas.
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades e Performance
 
-O projeto conta com diversas implementações técnicas focadas em Experiência do Usuário (UX) e Performance:
+O projeto conta com diversas implementações técnicas focadas em Experiência do Usuário (UX) e métricas oficiais de performance (Core Web Vitals):
 
-- **Navegação Inteligente:** Menu fixo (Sticky Header) com alteração dinâmica de opacidade via Scroll e menu Hambúrguer interativo para dispositivos móveis.
-- **Scroll Suave (Smooth Behavior):** Âncoras internas que deslizam suavemente até as seções correspondentes.
-- **Intersection Observer API:** Animações de entrada (Fade-in) ativadas dinamicamente apenas quando a seção entra no campo de visão (Viewport), poupando processamento.
-- **Lógica de Botão Flutuante:** O botão do WhatsApp acompanha a rolagem no celular, mas oculta-se automaticamente (Fade-out) ao atingir o rodapé de contato para evitar sobreposição de elementos.
-- **Conformidade LGPD:** Banner nativo de aceite de cookies integrado com `localStorage` para memorizar a escolha do usuário, além de página dedicada à Política de Privacidade.
-- **Otimização de Assets:** Uso de imagens nativas com `loading="lazy"` para otimização de SEO e ícones escaláveis (SVG / FontAwesome) que garantem nitidez absoluta em telas Retina/4K.
+- **Navegação Inteligente:** Menu fixo (Sticky Header) com alteração dinâmica de opacidade via Scroll e menu Hambúrguer interativo para dispositivos móveis, com gestão de estado semântico para leitores de tela (`aria-expanded`).
+- **Intersection Observer API:** Animações de entrada (Fade-in) ativadas dinamicamente apenas quando a seção entra no campo de visão, poupando processamento na Main Thread.
+- **Engenharia de Performance (PageSpeed):**
+  - Otimização rigorosa de LCP (_Largest Contentful Paint_) utilizando `rel="preload"` e `fetchpriority="high"` no Hero banner.
+  - Mitigação de CLS (_Cumulative Layout Shift_) através de `aspect-ratio` nativo via CSS para renderização previsível de SVGs.
+  - Carregamento assíncrono (Deferred Loading) de fontes (Montserrat) e bibliotecas de ícones para não bloquear a renderização inicial (FCP).
+  - Conversão total de assets gráficos para o formato de alta compressão **WebP**.
+- **Lógica de Botão Flutuante:** O botão do WhatsApp acompanha a rolagem no celular, ocultando-se automaticamente ao atingir o rodapé de contato para evitar sobreposição de elementos.
+- **Conformidade LGPD:** Banner nativo de aceite de cookies integrado com `localStorage` para memorizar a escolha do usuário.
 
 ## 🛠️ Tecnologias e Arquitetura
 
 O projeto foi construído sem o uso de frameworks pesados, priorizando velocidade e controle total do DOM.
 
-- **HTML5:** Estrutura altamente semântica (`<header>`, `<main>`, `<section>`, `<article>`), com tags otimizadas para acessibilidade (`aria-labels`).
-- **CSS3 (Vanilla):** - Utilização de **Custom Properties (Variáveis)** para manutenção rápida do Theme (Cores, Fontes e Tamanhos).
-  - Layouts complexos construídos com **CSS Grid** e **Flexbox**.
-  - Responsividade _Mobile-First_ através de Media Queries milimétricas.
-- **JavaScript (ES6+):** Script modular, limpo e direto.
+- **HTML5:** Estrutura altamente semântica (`<header>`, `<main>`, `<section>`, `<article>`), otimizada para acessibilidade (WCAG 2.2) e SEO técnico.
+- **CSS3 (Vanilla):** - Arquitetura modular e componentizada.
+  - Utilização de Custom Properties (Variáveis) para manutenção rápida do Theme.
+  - Layouts construídos com CSS Grid e Flexbox.
+  - Responsividade _Mobile-First_ consolidada no fim da cascata para evitar sobrescritas indesejadas.
+- **JavaScript (ES6+):** Script focado na manipulação limpa do DOM e otimização de eventos síncronos pesados.
 
 ## 🎨 UI/UX & Design
 
-O projeto visual foi idealizado e construído por **Carolina ALves**.
+O projeto visual foi idealizado e construído por **Carolina Alves**.
 
 - **Paleta de Cores:** Foco no _Dark Theme_ com contrastes em tons claros, fugindo do padrão saturado tradicional e focando em uma identidade visual "Premium/Boutique".
 - **Tipografia:** Uso da família _Montserrat_ (Google Fonts) para garantir leiturabilidade e elegância em títulos e parágrafos.
