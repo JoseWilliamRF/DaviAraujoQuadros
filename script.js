@@ -90,7 +90,8 @@ const handleIntersection = (entries, observer) => {
 };
 
 const observerOptions = {
-  threshold: 0.15, // A animação dispara quando 15% da seção aparecer na tela
+  rootMargin: '0px 0px -80% 0px',
+  threshold: 0, // A animação dispara quando 15% da seção aparecer na tela
 };
 
 const observer = new IntersectionObserver(handleIntersection, observerOptions);
