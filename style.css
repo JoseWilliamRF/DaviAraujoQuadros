@@ -504,8 +504,10 @@ body {
     top: 5rem;
     left: 0;
     width: 100%;
-    background-color: var(--bg-dark);
-    padding: 1.875rem 0;
+    background-color: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(8px); /* Efeito de vidro moderno */
+    -webkit-backdrop-filter: blur(8px);
+    padding: 2rem 0;
     margin: 0;
     border-bottom: 1px solid #333;
   }
@@ -513,6 +515,7 @@ body {
   .nav-list.active li {
     width: 100%;
     text-align: center;
+    padding: 0.25rem 0;
   }
 
   .nav-list.active li:not(:last-child)::after {
