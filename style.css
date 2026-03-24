@@ -1,14 +1,6 @@
-html {
-  scroll-behavior: smooth; /* Rolagem suave ao clicar no menu */
-  scroll-padding-top: 6.25rem;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* =========================================
+   1. VARIÁVEIS E CONFIGURAÇÕES GLOBAIS
+   ========================================= */
 :root {
   --bg-dark: #050505;
   --bg-light: #ffffff;
@@ -18,34 +10,28 @@ html {
   --container-width: 68.75rem;
 }
 
+html {
+  scroll-behavior: smooth; /* Rolagem suave ao clicar no menu */
+  scroll-padding-top: 6.25rem; /* Evita que o header cubra os títulos ao rolar */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--bg-dark);
   color: var(--text-light);
   font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
 }
 
 /* =========================================
-   BARRA DE PROGRESSO DE ROLAGEM
+   2. CLASSES UTILITÁRIAS E GLOBAIS
    ========================================= */
-.scroll-progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999; /* Fica acima de TUDO, até do header */
-  width: 100%;
-  height: 3px; /* Bem fininha e elegante */
-  background: transparent;
-}
-
-.scroll-progress-bar {
-  height: 100%;
-  background: #fefefe !important; /* Linha branca. Se quiser verde, use var(--wa-green) */
-  width: 0%; /* Começa zerada */
-  transition: width 0.1s ease-out; /* Deixa o movimento fluido */
-}
-
-/* CLASSE DE CENTRALIZAÇÃO */
+/* Limita a largura do conteúdo e centraliza */
 .container {
   width: 100%;
   max-width: var(--container-width);
@@ -53,7 +39,7 @@ body {
   padding: 0 1.25rem;
 }
 
-/* Títulos universais das seções */
+/* Títulos padrões das seções */
 .section-title {
   font-size: 1.2rem;
   font-weight: 500;
@@ -61,8 +47,40 @@ body {
   margin-bottom: 1.25rem;
 }
 
+/* Barra de progresso de rolagem no topo da tela */
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: #fefefe !important;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+/* Animações de Fade-In controladas pelo JavaScript */
+.reveal {
+  opacity: 0;
+  transform: translateY(3.125rem);
+  transition:
+    opacity 1s ease,
+    transform 1s ease;
+}
+
+.reveal.fadeIn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* =========================================
-   HEADER (CABEÇALHO)
+   3. HEADER E NAVEGAÇÃO
    ========================================= */
 .header {
   width: 100%;
@@ -74,16 +92,12 @@ body {
   transition: all 0.3s ease;
 }
 
+/* Efeito Glassmorphism adicionado via JS ao rolar */
 .header.scrolled {
-  background-color: rgba(
-    5,
-    5,
-    5,
-    0.92
-  ) !important; /* Preto com 70% de transparência */
-  backdrop-filter: blur(15px); /* O efeito de desfoque */
-  -webkit-backdrop-filter: blur(15px); /* Suporte para navegadores Apple */
-  padding: 1rem 0; /* diminui um pouco a altura do header ao rolar */
+  background-color: rgba(5, 5, 5, 0.92) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 1rem 0;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -97,6 +111,7 @@ body {
   height: 2.8125rem;
 }
 
+/* Menu de Links */
 .nav-list {
   display: flex;
   list-style: none;
@@ -128,6 +143,7 @@ body {
   margin: 0 0.9375rem;
 }
 
+/* Ícone do WhatsApp no Header */
 .nav-whatsapp {
   background-color: var(--wa-green);
   color: white;
@@ -146,6 +162,7 @@ body {
   transform: scale(1.1);
 }
 
+/* Botão Hamburguer (Oculto no Desktop) */
 .mobile-btn {
   display: none;
   background: none;
@@ -156,17 +173,18 @@ body {
 }
 
 /* =========================================
-   SEÇÃO HERO (INÍCIO)
+   4. SEÇÕES DO SITE
    ========================================= */
+
+/* --- INÍCIO (Hero) --- */
 .hero {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  /* Substitua a URL pela sua imagem da Justiça */
   background-image: url('./images/background.webp');
   background-size: cover;
   background-position: center right;
-  padding-top: 10rem !important; /* Evita que o texto encoste no header */
+  padding-top: 10rem !important;
   padding-bottom: 3rem;
 }
 
@@ -202,9 +220,7 @@ body {
   background-color: #e0e0e0;
 }
 
-/* =========================================
-   ÁREAS DE ATUAÇÃO
-   ========================================= */
+/* --- ÁREAS DE ATUAÇÃO --- */
 .atuacao {
   padding: 5rem 0;
 }
@@ -217,19 +233,19 @@ body {
 }
 
 .card-area {
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Borda mais fina e elegante */
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 2.5rem 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animação com "bounce" */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .card-area:hover {
   background-color: rgba(255, 255, 255, 0.08);
-  transform: translateY(-10px); /* Card sobe */
-  border-color: var(--bg-light); /* Borda brilha */
+  transform: translateY(-10px);
+  border-color: var(--bg-light);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -241,7 +257,7 @@ body {
   height: 4rem;
   width: auto;
   aspect-ratio: 1 / 1;
-  filter: invert(1); /* Deixa ícones pretos brancos, caso não sejam */
+  filter: invert(1);
 }
 
 .card-area h3 {
@@ -250,9 +266,7 @@ body {
   line-height: 1.4;
 }
 
-/* =========================================
-   SOBRE
-   ========================================= */
+/* --- SOBRE --- */
 .sobre {
   padding: 80px 0;
 }
@@ -296,12 +310,10 @@ body {
   object-fit: cover;
 }
 
-/* =========================================
-   CONTATO E FOOTER (INVERSÃO DE CORES)
-   ========================================= */
+/* --- CONTATO E BOTÕES --- */
 .contato {
-  background-color: var(--bg-light); /* Fundo Branco! */
-  color: var(--text-dark); /* Texto Preto! */
+  background-color: var(--bg-light);
+  color: var(--text-dark);
   padding: 80px 0;
 }
 
@@ -332,8 +344,8 @@ body {
 }
 
 .btn-square {
-  background-color: var(--bg-dark); /* Botões Pretos */
-  color: var(--text-light); /* Ícones Brancos */
+  background-color: var(--bg-dark);
+  color: var(--text-light);
   width: 3.125rem;
   height: 3.125rem;
   display: flex;
@@ -349,19 +361,22 @@ body {
   background-color: #333333;
 }
 
+/* =========================================
+   5. FOOTER E COMPONENTES EXTRAS
+   ========================================= */
 .footer {
   background-color: var(--bg-dark);
   color: var(--text-light);
   text-align: center;
-  padding: 1.5625rem 0; /* 25px */
+  padding: 1.5625rem 0;
   font-size: 0.75rem;
-  letter-spacing: 0.0625rem; /* 1px */
+  letter-spacing: 0.0625rem;
   line-height: 1.6;
 }
 
 .dev-credits {
-  margin-top: 0.3125rem; /* 5px */
-  opacity: 0.7; /* Deixa o crédito do dev um pouco mais discreto que o copyright */
+  margin-top: 0.3125rem;
+  opacity: 0.7;
 }
 
 .dev-credits strong {
@@ -369,17 +384,18 @@ body {
   font-weight: 600;
 }
 
+/* --- BANNER DE COOKIES --- */
 .cookie-banner {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(5, 5, 5, 0.95); /* Quase preto com transparência */
+  background-color: rgba(5, 5, 5, 0.95);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-light);
   padding: 1.25rem 0;
   z-index: 9999;
-  display: none; /* Começa escondido, o JS mostra */
+  display: none; /* Controlado pelo JS */
 }
 
 .cookie-container {
@@ -406,148 +422,15 @@ body {
   cursor: pointer;
 }
 
-/* =========================================
-   RESPONSIVO (CELULAR E TABLETS PEQUENOS)
-   ========================================= */
-@media screen and (max-width: 992px) {
-  .atuacao-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas no tablet/mobile */
-  }
-
-  .sobre-texto-box {
-    padding: 2.5rem 9.375rem 2.5rem 2.5rem;
-    width: 85%;
-  }
-
-  .sobre-imagem {
-    width: 18.75rem;
-    height: 18.75rem;
-  }
-}
-/* =========================================
-   RESPONSIVO (CELULAR E TABLETS PEQUENOS)
-   ========================================= */
-@media screen and (max-width: 768px) {
-  /* 1. Banner de Cookies */
-  .cookie-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  /* 2. Header e Menu Mobile */
-  .nav-list,
-  .nav-whatsapp {
-    display: none; /* Esconde menu e WA no mobile. O script.js vai abri-los */
-  }
-
-  .mobile-btn {
-    display: block; /* Mostra o hambúrguer */
-  }
-
-  /* Estilo do menu mobile quando o botão for clicado (classe .active) */
-  .nav-list.active {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 5rem; /* Fica logo abaixo do header */
-    left: 0;
-    width: 100%;
-    background-color: var(--bg-dark);
-    padding: 1.875rem 0;
-    margin: 0; /* Remove a margem automática que empurrava para a direita */
-    border-bottom: 1px solid #333; /* Uma linha discreta separando o menu do site */
-  }
-
-  /* Centraliza os links no mobile */
-  .nav-list.active li {
-    width: 100%;
-    text-align: center;
-  }
-
-  .nav-list.active li:not(:last-child)::after {
-    display: none; /* Esconde aquelas barrinhas | no celular */
-  }
-
-  /* 3. Seções e Espaçamentos Gerais */
-  .hero {
-    min-height: auto; /* Remove a obrigatoriedade de ocupar a tela toda */
-    padding-top: 6rem; /* Empurra o texto para baixo do menu fixo */
-    padding-bottom: 3rem; /* Diminui a sobra na parte de baixo */
-  }
-
-  .hero-title {
-    font-size: 2.2rem;
-  }
-
-  .hero-description {
-    font-size: 0.95rem;
-  }
-
-  /* Diminui o respiro no topo e na base de todas as outras seções */
-  .atuacao,
-  .sobre,
-  .contato {
-    padding: 2.1875rem 0;
-  }
-
-  /* 4. Áreas de Atuação */
-  .card-icon img {
-    height: 2.5rem;
-  }
-
-  /* 5. Seção Sobre */
-  .sobre-wrapper {
-    flex-direction: column;
-  }
-
-  .sobre-texto-box {
-    width: 100%;
-    padding: 2.5rem 1.875rem 5rem 1.875rem; /* Padding extra embaixo pra foto encaixar */
-  }
-
-  .sobre-imagem {
-    position: relative;
-    margin-top: -3.75rem; /* Faz a foto sobrepor a caixa branca no mobile */
-    right: auto;
-    width: 15.625rem;
-    height: 15.625rem;
-  }
-
-  /* 6. Seção Contato */
-  .contato-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.875rem;
-  }
-
-  /* 7. Botão Flutuante (Correção de Visibilidade) */
-  .wa-flutuante {
-    display: flex; /* Garante que o botão apareça no celular */
-  }
-}
-
-/* Classes para o JavaScript (Animações de entrada) */
-.reveal {
-  opacity: 0;
-  transform: translateY(3.125rem); /* Começa 50px mais para baixo */
-  transition:
-    opacity 1s ease,
-    transform 1s ease; /* Duração de 1 segundo */
-}
-
-.reveal.fadeIn {
-  opacity: 1;
-  transform: translateY(0); /* Sobe para a posição original */
-}
-/* Botão Flutuante Global */
+/* --- WHATSAPP FLUTUANTE --- */
 .wa-flutuante {
   position: fixed;
-  bottom: 1.875rem; /* 30px */
-  right: 1.875rem; /* 30px */
+  bottom: 1.875rem;
+  right: 1.875rem;
   background-color: var(--wa-green);
   color: var(--text-light);
-  width: 3.75rem; /* 60px */
-  height: 3.75rem; /* 60px */
+  width: 3.75rem;
+  height: 3.75rem;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -569,15 +452,134 @@ body {
   opacity: 1;
 }
 
-/* Esconde o botão flutuante no computador (telas acima de 769px) */
-@media screen and (min-width: 769px) {
-  .wa-flutuante {
-    display: none;
+.wa-flutuante.hide {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8) translateY(20px);
+}
+
+/* =========================================
+   6. RESPONSIVIDADE (MEDIA QUERIES)
+   ========================================= */
+
+/* --- TABLETS --- */
+@media screen and (max-width: 992px) {
+  .atuacao-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sobre-texto-box {
+    padding: 2.5rem 9.375rem 2.5rem 2.5rem;
+    width: 85%;
+  }
+
+  .sobre-imagem {
+    width: 18.75rem;
+    height: 18.75rem;
   }
 }
 
-.wa-flutuante.hide {
-  opacity: 0; /* Esvanece suavemente */
-  visibility: hidden; /* Deixa de ser clicável (para não atrapalhar os botões de baixo) */
-  transform: scale(0.8) translateY(20px); /* Opcional: faz ele dar uma "descidinha" charmosa ao sumir */
+/* --- CELULARES --- */
+@media screen and (max-width: 768px) {
+  /* Banner de Cookies */
+  .cookie-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Header e Menu Mobile */
+  .nav-list,
+  .nav-whatsapp {
+    display: none;
+  }
+
+  .mobile-btn {
+    display: block;
+  }
+
+  .nav-list.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 5rem;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-dark);
+    padding: 1.875rem 0;
+    margin: 0;
+    border-bottom: 1px solid #333;
+  }
+
+  .nav-list.active li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-list.active li:not(:last-child)::after {
+    display: none;
+  }
+
+  /* Seções e Espaçamentos Gerais */
+  .hero {
+    min-height: auto;
+    padding-top: 6rem !important;
+    padding-bottom: 3rem;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+  }
+
+  .atuacao,
+  .sobre,
+  .contato {
+    padding: 2.1875rem 0;
+  }
+
+  /* Áreas de Atuação */
+  .card-icon img {
+    height: 2.5rem;
+  }
+
+  /* Seção Sobre */
+  .sobre-wrapper {
+    flex-direction: column;
+  }
+
+  .sobre-texto-box {
+    width: 100%;
+    padding: 2.5rem 1.875rem 5rem 1.875rem;
+  }
+
+  .sobre-imagem {
+    position: relative;
+    margin-top: -3.75rem;
+    right: auto;
+    width: 15.625rem;
+    height: 15.625rem;
+  }
+
+  /* Seção Contato */
+  .contato-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.875rem;
+  }
+
+  /* Garante botão no mobile */
+  .wa-flutuante {
+    display: flex;
+  }
+}
+
+/* --- DESKTOP (Regras específicas para telas grandes) --- */
+@media screen and (min-width: 769px) {
+  /* Esconde o botão flutuante no computador, mantendo o botão do menu superior */
+  .wa-flutuante {
+    display: none;
+  }
 }
