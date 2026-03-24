@@ -62,18 +62,31 @@ window.addEventListener('scroll', () => {
 // ==========================================
 const handleIntersection = (entries, observer) => {
   entries.forEach(entry => {
+    // 1. Lógica de Fade-In
     if (entry.isIntersecting) {
       entry.target.classList.add('fadeIn');
+
+      // --- NOVO: LÓGICA DE MENU ATIVO (SCROLL SPY) ---
+      // Pegamos o ID da seção que acabou de entrar na tela
+      const id = entry.target.getAttribute('id');
+      // Procuramos o link no menu que aponta para esse ID
+      const menuLink = document.querySelector(`.nav-list li a[href="#${id}"]`);
+
+      if (menuLink) {
+        // Removemos a classe 'active' de todos os links do menu
+        document.querySelectorAll('.nav-list li a').forEach(link => {
+          link.classList.remove('active');
+        });
+        // e adicionamos apenas no link da seção atual!
+        menuLink.classList.add('active');
+      }
     }
 
-    // ---  LÓGICA EXCLUSIVA PARA O BOTÃO FLUTUANTE ---
-    // Verificamos se a seção que está entrando/saindo é a de Contato pelo ID
+    // 2. Lógica do Botão Flutuante
     if (entry.target.id === 'contato') {
       if (entry.isIntersecting) {
-        // Se Contato estiver na tela e o botão existir, escondemos
         if (waFlutuante) waFlutuante.classList.add('hide');
       } else {
-        // Se Contato sair da tela e o botão existir, mostramos
         if (waFlutuante) waFlutuante.classList.remove('hide');
       }
     }
