@@ -56,54 +56,64 @@ window.addEventListener('scroll', () => {
 // ==========================================
 // 3. EVENTO DE FADE-IN NAS SECTIONS
 // ==========================================
-const handleIntersection = (entries, observer) => {
-  entries.forEach(entry => {
-    // 1. Lógica de Fade-In
-    if (entry.isIntersecting) {
-      entry.target.classList.add('fadeIn');
+// ==========================================
+// 3. SENSORES (ANIMAÇÃO & MENU ATIVO)
+// ==========================================
 
-      // --- NOVO: LÓGICA DE MENU ATIVO (SCROLL SPY) ---
-      // Pegamos o ID da seção que acabou de entrar na tela
-      const id = entry.target.getAttribute('id');
-      // Procuramos o link no menu que aponta para esse ID
-      const menuLink = document.querySelector(`.nav-list li a[href="#${id}"]`);
-
-      if (menuLink) {
-        // Removemos a classe 'active' de todos os links do menu
-        document.querySelectorAll('.nav-list li a').forEach(link => {
-          link.classList.remove('active');
-        });
-        // e adicionamos apenas no link da seção atual!
-        menuLink.classList.add('active');
-      }
-    }
-
-    // 2. Lógica do Botão Flutuante
-    if (entry.target.id === 'contato') {
+// SENSOR 1: Para as animações (Fade-In)
+// Ele é sensível: assim que a seção aparece 15%, ela ganha opacidade
+const revealObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
-        if (waFlutuante) waFlutuante.classList.add('hide');
-      } else {
-        if (waFlutuante) waFlutuante.classList.remove('hide');
+        entry.target.classList.add('fadeIn');
       }
-    }
-  });
-};
+    });
+  },
+  { threshold: 0.15 },
+);
 
-const observerOptions = {
-  rootMargin: '0px 0px -80% 0px',
-  threshold: 0, // A animação dispara quando 15% da seção aparecer na tela
-};
+// SENSOR 2: Para o Menu Ativo e WhatsApp (Scroll Spy)
+// Ele é focado no topo: só muda o menu quando a seção chega lá em cima
+const spyObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Lógica do Menu Dourado
+        const id = entry.target.getAttribute('id');
+        const menuLink = document.querySelector(
+          `.nav-list li a[href="#${id}"]`,
+        );
+        if (menuLink) {
+          document
+            .querySelectorAll('.nav-list li a')
+            .forEach(l => l.classList.remove('active'));
+          menuLink.classList.add('active');
+        }
 
-const observer = new IntersectionObserver(handleIntersection, observerOptions);
+        // Lógica do WhatsApp (Esconde no Contato)
+        if (entry.target.id === 'contato') {
+          if (waFlutuante) waFlutuante.classList.add('hide');
+        }
+      } else {
+        // Mostra o WhatsApp ao subir e sair do Contato
+        if (entry.target.id === 'contato') {
+          if (waFlutuante) waFlutuante.classList.remove('hide');
+        }
+      }
+    });
+  },
+  { rootMargin: '0px 0px -70% 0px' },
+); // Ajuste de precisão
 
+// Ativando os dois sensores em todas as seções
 sectionObserve.forEach(section => {
   if (section) {
-    // Adicionamos a classe 'reveal' via JS antes de observar
-    section.classList.add('reveal');
-    observer.observe(section);
+    section.classList.add('reveal'); // Garante que comece invisível
+    revealObserver.observe(section); // Cuida do Fade-In
+    spyObserver.observe(section); // Cuida do Dourado no Menu
   }
 });
-
 document.getElementById('ano-atual').textContent = new Date().getFullYear();
 
 // ==========================================
