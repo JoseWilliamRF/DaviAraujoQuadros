@@ -5,13 +5,11 @@ const icon = mobileBtn.querySelector('.fa-solid');
 const headerElement = document.querySelector('.header');
 const waFlutuante = document.querySelector('.wa-flutuante');
 
-// SELETORES PARA O FADE-IN
-const home = document.querySelector('#inicio');
-const atuacao = document.querySelector('#atuacao');
-const sobre = document.querySelector('#sobre');
-const contato = document.querySelector('#contato');
-const footer = document.querySelector('.footer');
-const sectionObserve = [home, atuacao, sobre, contato, footer];
+// SELETORES PARA O OBSERVER (Excluindo o footer da lógica de menu)
+const sections = document.querySelectorAll('section[id]');
+const sectionObserve = [...sections, document.querySelector('.footer')];
+
+const navLinks = document.querySelectorAll('.nav-list li a');
 
 // ==========================================
 // 1. EVENTOS DE MENU (MOBILE)
@@ -22,7 +20,6 @@ mobileBtn.addEventListener('click', () => {
   icon.classList.toggle('fa-xmark');
 });
 
-const navLinks = document.querySelectorAll('.nav-list li a');
 navLinks.forEach(link => {
   link.addEventListener('click', () => {
     navList.classList.remove('active');
@@ -32,7 +29,19 @@ navLinks.forEach(link => {
 });
 
 // ==========================================
-// 2. SCROLL: HEADER, PROGRESS BAR E REDE DE SEGURANÇA
+// 2. FUNÇÃO AUXILIAR: ATIVAR MENU
+// ==========================================
+function activateMenu(id) {
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${id}`) {
+      link.classList.add('active');
+    }
+  });
+}
+
+// ==========================================
+// 3. SCROLL: HEADER, PROGRESS BAR E FIM DE PÁGINA
 // ==========================================
 window.addEventListener('scroll', () => {
   // Header Glassmorphism
@@ -52,41 +61,36 @@ window.addEventListener('scroll', () => {
   const myBar = document.getElementById('myBar');
   if (myBar) myBar.style.width = scrolled + '%';
 
-  // --- REDE DE SEGURANÇA PARA SEÇÃO PEQUENA (CONTATO) ---
-  // Se o usuário chegar no fim absoluto da página, forçamos o Contato ativo
-  const scrollTotal = document.documentElement.scrollHeight;
-  const scrollPos = window.innerHeight + window.scrollY;
+  // --- LOGICA DE FIM DE PÁGINA (CHECKMATE) ---
+  const isAtBottom =
+    window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight - 50;
 
-  if (scrollTotal - scrollPos <= 50) {
-    // Margem de 50px do fim da página
-    document
-      .querySelectorAll('.nav-list li a')
-      .forEach(l => l.classList.remove('active'));
-    const linkContato = document.querySelector(
-      '.nav-list li a[href="#contato"]',
-    );
-    if (linkContato) linkContato.classList.add('active');
+  if (isAtBottom) {
+    activateMenu('contato');
     if (waFlutuante) waFlutuante.classList.add('hide');
+  } else if (window.scrollY < 100) {
+    activateMenu('inicio');
   }
 });
 
 // ==========================================
-// 3. OBSERVERS (ANIMAÇÃO E MENU)
+// 4. OBSERVERS (ANIMAÇÃO E MENU)
 // ==========================================
 
-// SENSOR 1: Fade-In e Controle do WhatsApp (Alta Sensibilidade)
+// SENSOR 1: Fade-In e WhatsApp (Sensibilidade Alta)
 const revealObserver = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('fadeIn');
 
-        // Seção Contato detectada -> Esconde WhatsApp
+        // WhatsApp some se o Contato aparecer (mesmo que só um pedaço)
         if (entry.target.id === 'contato' && waFlutuante) {
           waFlutuante.classList.add('hide');
         }
       } else {
-        // Saiu da seção Contato (subindo) -> Mostra WhatsApp
+        // WhatsApp volta se sair do Contato (subindo)
         if (entry.target.id === 'contato' && waFlutuante) {
           waFlutuante.classList.remove('hide');
         }
@@ -94,54 +98,58 @@ const revealObserver = new IntersectionObserver(
     });
   },
   { threshold: 0.1 },
-); // Dispara assim que 10% da seção aparece
+);
 
 // SENSOR 2: Menu Ativo (Scroll Spy de Precisão)
 const spyObserver = new IntersectionObserver(
   entries => {
-    entries.forEach(entry => {
-      // Só processa se não estivermos no fim da página (para não conflitar com a Rede de Segurança)
+    // Pegamos apenas o que está entrando na tela
+    const intersecting = entries.filter(entry => entry.isIntersecting);
+
+    // Se houver mais de uma (comum no Desktop), pegamos a que estiver MAIS ABAIXO
+    // no código (o último item do array), pois é a seção para onde o usuário está indo.
+    if (intersecting.length > 0) {
+      const activeSection = intersecting[intersecting.length - 1];
+
+      // Só mudamos se NÃO estivermos no final da página (onde a lógica de scroll assume)
       const isAtBottom =
         window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 60;
+        document.documentElement.scrollHeight - 100;
 
-      if (entry.isIntersecting && !isAtBottom) {
-        const id = entry.target.getAttribute('id');
-        const menuLink = document.querySelector(
-          `.nav-list li a[href="#${id}"]`,
-        );
-
-        if (menuLink) {
-          document
-            .querySelectorAll('.nav-list li a')
-            .forEach(l => l.classList.remove('active'));
-          menuLink.classList.add('active');
-        }
+      if (!isAtBottom) {
+        activateMenu(activeSection.target.id);
       }
-    });
+    }
   },
-  { rootMargin: '0px 0px -70% 0px' },
+  {
+    // Esta margem cria uma "linha de gatilho" logo abaixo do seu header fixo.
+    // Mesmo com padding, a seção "cruza" essa linha e ativa o dourado.
+    rootMargin: '-15% 0px -80% 0px',
+    threshold: 0,
+  },
 );
 
-// Ativação
+// Ativando tudo
 sectionObserve.forEach(section => {
   if (section) {
     section.classList.add('reveal');
     revealObserver.observe(section);
-    spyObserver.observe(section);
+    if (section.id) spyObserver.observe(section);
   }
 });
 
-document.getElementById('ano-atual').textContent = new Date().getFullYear();
+// Ano Atual
+const anoElem = document.getElementById('ano-atual');
+if (anoElem) anoElem.textContent = new Date().getFullYear();
 
 // ==========================================
-// 4. LGPD
+// 5. LGPD
 // ==========================================
 const cookieBanner = document.getElementById('cookie-banner');
 const btnAccept = document.getElementById('accept-cookies');
 
-if (!localStorage.getItem('cookiesAceitos')) {
-  if (cookieBanner) cookieBanner.style.display = 'block';
+if (cookieBanner && !localStorage.getItem('cookiesAceitos')) {
+  cookieBanner.style.display = 'block';
 }
 
 if (btnAccept) {
