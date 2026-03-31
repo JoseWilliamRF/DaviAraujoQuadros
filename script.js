@@ -158,3 +158,15 @@ if (btnAccept) {
     cookieBanner.style.display = 'none';
   });
 }
+
+// --- Cálculo automático de anos de experiência (Dr. Davi) ---
+const anoInicio = 2012;
+const anoAtual = new Date().getFullYear();
+const tempoDeExperiencia = anoAtual - anoInicio;
+
+// Injeta o número atualizado no HTML
+
+const elementoAnos = document.getElementById('anos-experiencia');
+if (elementoAnos) {
+  elementoAnos.innerText = tempoDeExperiencia;
+}
